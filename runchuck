@@ -4,4 +4,5 @@ if [ $# -ne 1 ]; then
 	exit
 fi
 chuck --loop & 
+sleep "0.5"
 chuck + myimport.ck:$1
