@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+chuck --loop & 
+chuck + myimport.ck:$1
