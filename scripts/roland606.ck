@@ -1,6 +1,6 @@
 
 
-TimeSignature.common(120) @=> TimeSignature t;
+TimeSignature.common(96) @=> TimeSignature t;
 RolandTr606 drum;
 //drum.demo();
 
