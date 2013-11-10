@@ -1,3 +1,4 @@
+//Assignment_3_FibonacciTechno.ck
 //random select kick, snare, and stereo_fx 
 //using a fibonacci sequence to construct a repeated bass line & melody
 //every play will generate a total diffrent sound
