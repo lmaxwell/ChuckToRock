@@ -1,9 +1,21 @@
-//Assignment_5_
+//Assignment_5_random_rock
+//try to set delay time to 3/4 beat to make a "U2" style delay rhythm
+//melody: note is sampled from chord by sampleChord function, duration is determined randomly by random2(0,2), 0:note off, 1: note on, 2:hold on
 
-Pan2 panChord => Gain master => dac;
+Pan2 panChord => DelayL eightdot => Gain master => JCRev reverb=> dac;
 0.7=>master.gain;
+0.05=>reverb.mix;
+0.5=>reverb.gain;
 SawOsc chord[3];
-Flute note => master;
+
+ADSR chordEnv=> panChord;
+//chordEnv.set(0.05,0.04,0.6,0.3);
+for(0=>int i;i<3;i++)
+{
+	chord[i]=>chordEnv;	
+}
+
+Flute note => Echo delay => master;
 SawOsc bass;
 
 SndBuf kick => master;
@@ -24,54 +36,79 @@ hihat.samples() => hihat.pos;
 snare2.samples() => snare2.pos;
 
 0.75::second => dur secondPerBeat;
+secondPerBeat *2  => delay.max;
+secondPerBeat * 2  => delay.delay;
+0.8=>delay.mix;
+
+secondPerBeat  => eightdot.max;
+secondPerBeat * 3.0/4.0  => eightdot.delay;
+//1.0=> eightdot.mix;
 
 
 [49,50,52,54,56,57,59,61] @=> int scale[];
 
 Flute flute => master;
-Mandolin mandolin => dac;
-0=> int i;
 
-/*
-while(i<scale.cap())
-{
-	scale[i] => Std.mtof => flute.freq;
-	//flute.startBlowing(1.0);
-	0.5=>flute.noteOn;
-	0.5::second => now;
-	//flute.stopBlowing(1.0);
-	1.0=>flute.noteOff;
-	scale[i]+Math.random2(0,1)*12 => Std.mtof =>mandolin.freq;
-	0.5::second=>now;
-	Math.randomf()=>mandolin.noteOn;
-	0.5::second => now;
-	1.0 => mandolin.noteOff;
-	0.5::second => now;
-	i++;
-}
-*/
+
+
 
 int kickPtrn[];
 int snarePtrn[];
 int bassPtrn[];
 int chordPtrn[];
-int snare2Ptrn[8];
-int melodyPtrn1[];
-int melodyPtrn2[];
+int melodyPtrn[];
 
 [1,0,0,0,1,0,0,0]@=> kickPtrn;
 [0,0,1,0,0,0,1,0]@=> snarePtrn;
 [1,0,1,0,1,0,1,0] @=>bassPtrn;
-[1,2,0,1,1,1,2,2] @=>melodyPtrn1; // 1:note On 0:note Off 2:hold on
-[2,0,1,0,1,1,2,0] @=>melodyPtrn2; 
-[1,1,0,1,1,1,0,1] @=>chordPtrn;
-while(true)
+[0,0,0,0,0,0,0,0] @=>melodyPtrn; // 1:note On 0:note Off 2:hold on 
+								// actually, melody pattern is generated randomly in palyPattern() 
+[1,1,0,1,0,1,0,1] @=>chordPtrn;
+
+
+
+playPattern(kickPtrn,snarePtrn,melodyPtrn,1,"minor",bassPtrn); // 4 beats * 0.75 seconds/beat = 3 seconds
+playPattern(kickPtrn,snarePtrn,melodyPtrn,3,"major",bassPtrn);
+playPattern(kickPtrn,snarePtrn,melodyPtrn,7,"minor",bassPtrn);
+playPattern(kickPtrn,snarePtrn,melodyPtrn,4,"minor",bassPtrn);
+
+
+[1,0,0,0,1,0,0,0]@=> kickPtrn;
+[0,1,0,1,0,1,0,1]@=> snarePtrn;
+[1,0,1,0,1,0,1,0] @=>bassPtrn;
+[0,0,0,0,0,0,0,0] @=>melodyPtrn;  
+[1,1,1,1,1,1,1,1] @=>chordPtrn;
+
+playPattern(kickPtrn,snarePtrn,melodyPtrn,1,"minor",bassPtrn); // 4 beats * 0.75 seconds/beat = 3 seconds
+playPattern(kickPtrn,snarePtrn,melodyPtrn,3,"major",bassPtrn);
+playPattern(kickPtrn,snarePtrn,melodyPtrn,7,"minor",bassPtrn);
+playPattern(kickPtrn,snarePtrn,melodyPtrn,4,"minor",bassPtrn);
+
+playPattern(kickPtrn,snarePtrn,melodyPtrn,7,"minor",bassPtrn);
+playPattern(kickPtrn,snarePtrn,melodyPtrn,4,"minor",bassPtrn);
+//ending
+0=>kick.pos;
+0=>hihat.pos;
+
+for(0=>int i;i<3;i++)
 {
-	playPattern(kickPtrn,snarePtrn,melodyPtrn1,1,"minor",bassPtrn);
-	playPattern(kickPtrn,snarePtrn,melodyPtrn2,3,"major",bassPtrn);
-	playPattern(kickPtrn,snarePtrn,melodyPtrn1,7,"minor",bassPtrn);
-	playPattern(kickPtrn,snarePtrn,melodyPtrn2,4,"minor",bassPtrn);
+	chord[i]=>	chordEnv;
 }
+
+scale[0]=>Std.mtof => chord[0].freq; //root note
+scale[0]+3+Math.random2(0,2)*12=>Std.mtof=>chord[1].freq; //minor third note
+scale[0] +7 +Math.random2(-1,1)*12=>Std.mtof=>chord[2].freq;//fifth note
+chordEnv.keyOn();
+0.2::second=>now;
+chordEnv.keyOff();
+chordEnv.keyOn();
+0.2::second=>now;
+chordEnv.keyOff();
+chordEnv.keyOn();
+0.2::second=>now;
+chordEnv.keyOff();
+1.4::second => now;
+
 
 //play pattern
 fun void playPattern(int kickPtrn[],int snarePtrn[],int melodyPtrn[],int chordDegree,string chordQuality,int bassPtrn[])
@@ -91,16 +128,6 @@ fun void playPattern(int kickPtrn[],int snarePtrn[],int melodyPtrn[],int chordDe
 		if(i==0)
 			0=>hihat.pos;
 		
-		//snare2 reverse 
-		//<<<snare2,snare2Ptrn[i]>>>;
-		if(snare2Ptrn[i]==1)
-		{
-			snare2=>master;
-			Math.random2f(-1,0)=>snare2.rate;
-			0.5=>snare2.gain;
-			snare2.samples()=>snare2.pos;
-		}
-
 		//bass
 		0.2=>bass.gain;
 		if(bassPtrn[i]==1)
@@ -114,7 +141,8 @@ fun void playPattern(int kickPtrn[],int snarePtrn[],int melodyPtrn[],int chordDe
 		{
 			for (0=>int i;i<3;i++)
 			{
-				chord[i] => panChord;	
+				//chord[i] => chordEnv ;	
+				1=>chordEnv.keyOn;
 				Math.random2f(-1.0,1.0) => panChord.pan;
 				0.3/3.0 => chord[i].gain;
 			}
@@ -128,6 +156,7 @@ fun void playPattern(int kickPtrn[],int snarePtrn[],int melodyPtrn[],int chordDe
 			;	
 		}
 		//melody
+		Math.random2(0,2) => melodyPtrn[i];
 		if(melodyPtrn[i]==1) //note on
 		{
 			note=>master;
@@ -154,14 +183,15 @@ fun void playPattern(int kickPtrn[],int snarePtrn[],int melodyPtrn[],int chordDe
 
 		secondPerHalfbeat*1/4=>now;
 		
-		bass =< master;
+			bass =< master;
 
 		secondPerHalfbeat*1/2=>now;
-	
 		for (0=>int i;i<3;i++)
 		{
-			chord[i] =< panChord;	
+			//chord[i] =< chordEnv;	
+			1=>chordEnv.keyOff;
 		}
+
 		secondPerHalfbeat*1/4=>now;
 
 		//note=<master;
