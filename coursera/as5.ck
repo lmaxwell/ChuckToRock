@@ -2,14 +2,14 @@
 //try to set delay time to 3/4 beat to make a "U2" style delay rhythm
 //melody: note is sampled from chord by sampleChord function, duration is determined randomly by random2(0,2), 0:note off, 1: note on, 2:hold on
 
-Pan2 panChord => DelayL eightdot => Gain master => JCRev reverb=> dac;
+Pan2 panChord => DelayL eightdot  => Gain master => JCRev reverb=> dac;
 0.7=>master.gain;
 0.05=>reverb.mix;
-0.5=>reverb.gain;
+0.75=>reverb.gain;
 SawOsc chord[3];
 
 ADSR chordEnv=> panChord;
-//chordEnv.set(0.05,0.04,0.6,0.3);
+chordEnv.set(0.0001,0.04,0.6,0.3);
 for(0=>int i;i<3;i++)
 {
 	chord[i]=>chordEnv;	
@@ -38,12 +38,10 @@ snare2.samples() => snare2.pos;
 0.75::second => dur secondPerBeat;
 secondPerBeat *2  => delay.max;
 secondPerBeat * 2  => delay.delay;
-0.8=>delay.mix;
+0.6=>delay.mix;
 
 secondPerBeat  => eightdot.max;
 secondPerBeat * 3.0/4.0  => eightdot.delay;
-//1.0=> eightdot.mix;
-
 
 [49,50,52,54,56,57,59,61] @=> int scale[];
 
@@ -144,7 +142,7 @@ fun void playPattern(int kickPtrn[],int snarePtrn[],int melodyPtrn[],int chordDe
 				//chord[i] => chordEnv ;	
 				1=>chordEnv.keyOn;
 				Math.random2f(-1.0,1.0) => panChord.pan;
-				0.3/3.0 => chord[i].gain;
+				0.5/3.0 => chord[i].gain;
 			}
 		}
 		if(chordPtrn[i]==0)
