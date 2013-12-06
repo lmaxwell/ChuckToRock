@@ -5,11 +5,12 @@
 
 Machine.add(me.dir() + "/drums.ck") => int drumID;
 
-
+2.6::second=>now;
 Machine.add(me.dir() + "/bass.ck") => int bassID;
 
+2.6::second => now;
 Machine.add(me.dir() + "/piano.ck") => int pianoID;
-10::second => now;
+4.8::second => now;
 10::second => now;
 
 Machine.add(me.dir() + "/flute.ck") => int fluteID;

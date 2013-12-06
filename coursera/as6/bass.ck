@@ -1,11 +1,11 @@
 // bass.ck
-// Insert the title of your piece here
-
-// Part of your composition goes here
+// randomBass() play sixteen note randomly 
+// walkingBass() eightnote walking bass
 
 [46,48,49,51,53,54,56,58] @=> int scale[];
 0.65::second => dur durPerBeat;
-Mandolin bass =>Gain master =>  dac;
+Mandolin bass =>JCRev reverb =>Gain master =>  dac;
+0.04=>reverb.mix;
 0.4=>bass.gain;
 0.015=>bass.bodySize;
 0.4=>bass.pluckPos;
@@ -14,36 +14,42 @@ Mandolin bass =>Gain master =>  dac;
 
 
 int bassPtrn[8];
-while(true){
-	playBassPattern(bassPtrn,4,"minor");
-	playBassPattern(bassPtrn,7,"major");
-	playBassPattern(bassPtrn,3,"major");
-	playBassPattern(bassPtrn,6,"major");
-	playBassPattern(bassPtrn,2,"diminished");
-	playBassPattern(bassPtrn,5,"major");
-	playBassPattern(bassPtrn,1,"minor");
-	playBassPattern(bassPtrn,1,"minor");
-}
 
+walkingBass(4,"minor");
+walkingBass(7,"major");
+randomBass(3,"major");
+randomBass(6,"major");
+randomBass(2,"diminished");
+randomBass(5,"major");
+walkingBass(1,"minor");
+randomBass(2,"diminished");
+randomBass(5,"major");
+walkingBass(1,"minor");
 
-//play pattern
-fun void playBassPattern(int bassPtrn[],int chordDegree,string chordQuality)
+//ending
+sampleChord(1,"minor","bass") => Std.mtof => bass.freq;
+1.0=>bass.noteOn;
+1.4::second => now;
+    
+
+//play bass in sixteen note
+fun void randomBass(int chordDegree,string chordQuality)
 {
-		
-	for(0=>int i;i<bassPtrn.cap();i++)
+	int bassPtrn;
+	for(0=>int i;i<16;i++)
 	{
 		
 			//bass
 		if(i%8==0)
-			1=>bassPtrn[i];
+			1=>bassPtrn;
 		else
-			Math.random2(0,2)=>bassPtrn[i];
-		if(bassPtrn[i]==1)
+			Math.random2(0,2)=>bassPtrn;
+		if(bassPtrn==1)
 		{
 			sampleChord(chordDegree,chordQuality,"bass") => Std.mtof => bass.freq;
 			1.0=>bass.noteOn;
 		}
-		else if(bassPtrn[i]==0)
+		else if(bassPtrn==0)
 		{
 			1.0=>bass.noteOff;	
 		}
@@ -53,6 +59,21 @@ fun void playBassPattern(int bassPtrn[],int chordDegree,string chordQuality)
 
 	}
 }
+
+//play bass in eighth note
+fun void walkingBass(int chordDegree,string chordQuality)
+{
+	int bassPtrn;
+	for(0=>int i;i<8;i++)
+	{
+		sampleChord(chordDegree,chordQuality,"bass") => Std.mtof => bass.freq;
+		1.0=>bass.noteOn;
+		durPerBeat*1/2*3/4=>now;
+		1.0=>bass.noteOff;
+		durPerBeat*1/2*1/4=>now;
+	}
+}
+
 fun int sampleChord(int degree,string quality,string type)
 {
 	int chordNotes[];

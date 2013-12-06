@@ -4,8 +4,8 @@
 // Part of your composition goes here
 
 Mix2 mix =>  JCRev reverb => dac;
-0.02 => reverb.mix;
-0.9 => reverb.gain;
+0.04 => reverb.mix;
+0.95 => reverb.gain;
 SndBuf kick => reverb;
 SndBuf snare => Pan2 panSnare => reverb; 
 SndBuf snare2 => Pan2 panSnare2 => reverb;
@@ -33,7 +33,8 @@ cowBell.samples()=>cowBell.pos;
 [0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0] @=>int snarePtrn[];
 [1,1,0,1,0,0,1,0,0,1,0,0,0,0,1,0] @=>int cowBellPtrn[];
 
-while(true)
+now + 30::second => time later;
+while(now<later-1.4::second)
 {
 	playDrumPattern(kickPtrn,snarePtrn);	
 }

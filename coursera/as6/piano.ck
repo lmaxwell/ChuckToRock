@@ -1,5 +1,6 @@
 // piano.ck
-// Insert the title of your piece here
+// 
+//
 [46,48,49,51,53,54,56,58] @=> int scale[];
 0.65::second => dur durPerBeat;
 
@@ -8,26 +9,29 @@
 
 
 Rhodey chord[3];
-Pan2 pan => dac;
+Pan2 pan => JCRev reverb =>  dac;
+0.1=>reverb.mix;
 for(0=>int i; i<3;i++)
 {
 	chord[i]=>pan;
-	0.6=>chord[i].gain;
+	0.4=>chord[i].gain;
 }
 
 [1,2,1,2,2,1,0,0,0,1,0,0,1,2,0,0] @=> int chordPtrn[];
 
 
-while(true){
-	playChordPattern(chordPtrn,4,"minor");
-	playChordPattern(chordPtrn,7,"major");
-	playChordPattern(chordPtrn,3,"major");
-	playChordPattern(chordPtrn,6,"major");
-	playChordPattern(chordPtrn,2,"diminished");
-	playChordPattern(chordPtrn,5,"major");
-	playChordPattern(chordPtrn,1,"minor");
-	playChordPattern(chordPtrn,1,"minor");
-}
+
+//playChordPattern(chordPtrn,4,"minor");
+playChordPattern(chordPtrn,7,"major");
+playChordPattern(chordPtrn,3,"major");
+playChordPattern(chordPtrn,6,"major");
+playChordPattern(chordPtrn,2,"diminished");
+playChordPattern(chordPtrn,5,"major");
+playChordPattern(chordPtrn,1,"minor");
+playChordPattern(chordPtrn,2,"diminished");
+playChordPattern(chordPtrn,5,"major");
+playChordPattern(chordPtrn,1,"minor");
+
 
 
 fun void playChordPattern(int chordPtrn[],int chordDegree,string chordQuality)
