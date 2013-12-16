@@ -3,3 +3,5 @@
 samples
 coursera/audio
 coursera/__MACOSX
+*.wav
+*.mp3

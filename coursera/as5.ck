@@ -8,12 +8,12 @@
 
 Gain master=> dac;
 
-0.75=>master.gain;
+0.8=>master.gain;
 0.04=>reverb.mix;
 0.2=>reverb2.mix; //diffrent reverb mix for left and right channel
 SawOsc chord[3];
 
-1.0=>gainChord.gain;
+0.6=>gainChord.gain;
 gainChord=> Gain feedBack => Delay eightdot => gainChord;
 0.8=>feedBack.gain;
 ADSR chordEnv=> gainChord;
@@ -31,8 +31,9 @@ SndBuf snare => master;
 SndBuf hihat => master;
 SndBuf snare2 => master;
 
-1.0=>kick.gain;
-1.0=>snare.gain;
+0.6=>kick.gain;
+0.6=>snare.gain;
+0.4=>hihat.gain;
 me.dir() + "/audio/kick_02.wav" => kick.read;
 me.dir() + "/audio/snare_02.wav" => snare.read;
 me.dir() + "/audio/hihat_04.wav" => hihat.read;
@@ -164,14 +165,14 @@ fun void playPattern(int kickPtrn[],int snarePtrn[],int melodyPtrn[],int chordDe
 		Math.random2(0,2) => melodyPtrn[i];
 		if(melodyPtrn[i]==1) //note on
 		{
-			note=>master;
-			0.3=> note.gain;
+			//note=>master;
+			0.4=> note.gain;
 			sampleChord(chordDegree,chordQuality,"melody") => Std.mtof => note.freq;
 			1.0=>note.noteOn;
 		}
 		if(melodyPtrn[i]==0) //note off
 		{
-			note=<master;	
+			//note=<master;	
 			1.0=>note.noteOff;
 		}
 		if(melodyPtrn[i]==2) //hold on

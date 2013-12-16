@@ -16,10 +16,10 @@ SqrOsc bass => master;
 //setting volumn 
 0.7 => sin.gain;
 0.5 => master.gain;
-0.5=> bass.gain;
+0.3=> bass.gain;
 0.5=>hihat.gain;
-0.8 => clap.gain;
-
+0.6 => clap.gain;
+0.6=>cowbell.gain;
 
 //read kick
 for (0=>int i;i<5;i++)
@@ -27,7 +27,7 @@ for (0=>int i;i<5;i++)
 	kick[i]=>dac;
 	me.dir() +"/audio/kick_0"+Std.itoa(i+1)+".wav" => kick[i].read;
 	kick[i].samples() => kick[i].pos;
-	0.8=>kick[i].gain;
+	0.5=>kick[i].gain;
 }
 //read snare
 for (0=>int i;i<3;i++)
@@ -35,18 +35,19 @@ for (0=>int i;i<3;i++)
 	snare[i]=>dac;
 	me.dir() +"/audio/snare_0"+Std.itoa(i+1)+".wav" => snare[i].read;
 	snare[i].samples() => snare[i].pos;
-	0.8 => snare[i].gain;
+	0.6 => snare[i].gain;
 }
 //read clap
 clap =>Pan2 clapPan => master;
 me.dir() +"/audio/clap_01.wav"=>clap.read;
 clap.samples() => clap.pos;
+0.7=>clap.gain;
 
 //read hihat
 hihat => Pan2 hihatPan => master;
 me.dir() +"/audio/hihat_03.wav" => hihat.read;
 hihat.samples() => hihat.pos;
-
+0.7=>hihat.gain;
 //read cowbell
 cowbell=>Pan2 cowbellPan => master;
 me.dir() +"/audio/cowbell_01.wav" => cowbell.read;
@@ -58,6 +59,7 @@ for (0=>int i;i<5;i++)
 	stereo[i]=> dac;
 	me.dir()+ "/audio/stereo_fx_0"+Std.itoa(i+1)+".wav" => stereo[i].read;	
 	stereo[i].samples() => stereo[i].pos;
+	0.6=>stereo[i].gain;
 }
 
 [50,52,53,55,57,59,60,62] @=> int D_Dorian[]; //dorian scale
@@ -100,7 +102,7 @@ while(beat<112)
 			//<<<"reverse">>>;
 			kick[which].samples() => kick[which].pos;
 		}
-		0.3=>bass.gain;
+		0.1=>bass.gain;
 	}
 	if(beat % 8 == 2|| beat %8 ==6) //radom select snare, clap on beat 2 or 4
 	{

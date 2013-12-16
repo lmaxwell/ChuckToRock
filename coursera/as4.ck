@@ -5,7 +5,7 @@
 
 
 Gain master => dac;
-0.7=>master.gain;
+0.6=>master.gain;
 SawOsc chord[3];
 SinOsc note;
 SawOsc bass;
@@ -15,8 +15,8 @@ SndBuf snare => master;
 SndBuf hihat => master;
 SndBuf snare2 => master;
 
-0.8=>kick.gain;
-1.0=>snare.gain;
+0.7=>kick.gain;
+0.7=>snare.gain;
 me.dir() + "/audio/kick_02.wav" => kick.read;
 me.dir() + "/audio/snare_02.wav" => snare.read;
 me.dir() + "/audio/hihat_04.wav" => hihat.read;
@@ -117,10 +117,10 @@ playPattern(kickPtrn,snarePtrn,snare2Ptrn,1,"major",bassPtrn);
 //ending
 0=>hihat.pos;
 snare2.samples()=>snare2.pos;
-playChord(1,"major",0.5,0.4); //0.5 beat * 0.6 secondsPerBeat = 0.3 seconds
+playChord(1,"major",0.5,0.2); //0.5 beat * 0.6 secondsPerBeat = 0.3 seconds
 0.5*secondPerBeat => now;         // 0.5 beat silence;   
 snare2.samples()=>snare2.pos;
-playChord(1,"major",1,0.4); // beat * 0.6 secondsPerBeat = 0.6 seconds
+playChord(1,"major",1,0.2); // beat * 0.6 secondsPerBeat = 0.6 seconds
 
 
 // functions 
@@ -147,7 +147,7 @@ fun void playPattern(int kickPtrn[],int snarePtrn[],int snare2Ptrn[],int chordDe
 		{
 			snare2=>master;
 			Math.random2f(-1,0)=>snare2.rate;
-			0.5=>snare2.gain;
+			0.06=>snare2.gain;
 			snare2.samples()=>snare2.pos;
 		}
 
