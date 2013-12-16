@@ -1,5 +1,5 @@
 *~
-*.swp
+*.sw*
 samples
 coursera/audio
 coursera/__MACOSX
