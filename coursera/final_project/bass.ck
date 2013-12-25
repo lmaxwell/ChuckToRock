@@ -7,7 +7,7 @@ SongInfo.scale @=> int scale[];
 BPM.quarterNote => dur quarterNote;
 Mandolin bass =>JCRev reverb =>Gain master =>  dac;
 0.04=>reverb.mix;
-0.3=>bass.gain;
+0.2=>bass.gain;
 0.015=>bass.bodySize;
 0.4=>bass.pluckPos;
 0.005=>bass.stringDamping;
@@ -15,13 +15,13 @@ Mandolin bass =>JCRev reverb =>Gain master =>  dac;
 
 
 0=>int count;
-while(count<2)
+while(count<8)
 {
 	randomBass(1,"minor");
 	randomBass(6,"major");
 	count++;
 }
-
+<<<"bass over">>>;
 walkingBass(1,"minor");
 walkingBass(6,"major");
 walkingBass(4,"minor");

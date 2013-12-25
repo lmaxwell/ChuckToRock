@@ -11,16 +11,16 @@ BPM.quarterNote => dur quarterNote;
 Rhodey chord[3];
 Pan2 pan[3];
 JCRev reverb =>  dac;
-0.1=>reverb.mix;
+0.3=>reverb.mix;
 for(0=>int i; i<3;i++)
 {
 	chord[i]=>pan[i]=>dac;
-	0.4=>chord[i].gain;
+	0.1=>chord[i].gain;
 }
 
 
 0=>int count;
-while(count<4)
+while(count<10)
 {
 	playChord(1,"minor",0.6);
 	quarterNote*2 => now;
@@ -33,7 +33,7 @@ while(count<4)
 	quarterNote*2 => now;
 	count++;
 }
-
+<<<"piano over">>>;
 	playChord(1,"minor",0.6);
 	quarterNote*1 => now;
 	playChord(1,"minor",0.6);
@@ -81,7 +81,6 @@ fun void playChord(int degree,string quality,float gain)
 	else
 		scale[degree-1] + 3 + Math.random2(-1,2)*12=> Std.mtof => chord[1].freq;
 	scale[degree-1] + 7 + Math.random2(-1,2)*12=> Std.mtof => chord[2].freq;
-
 }
 
 
